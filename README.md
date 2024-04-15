@@ -1,16 +1,28 @@
 # personal_expense_tracker
 
-A new Flutter project.
-
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+open cmd clone the project
+```
+git clone https://github.com/jameelspario/personal-expense-tracker.git
+```
 
-A few resources to get you started if this is your first Flutter project:
+cd to project directory
+```
+cd personal-expense-tracker
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+run flutter command 
+```
+flutter pub get
+flutter run
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+#### project is build with
+- Flutter 3.16.5
+- Dart 3.2.3
+- openjdk 17.0.7
+- kotlin_version '1.7.10'
+- gradle-7.5-all
+
+### 
