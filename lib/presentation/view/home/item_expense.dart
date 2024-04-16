@@ -15,24 +15,28 @@ class ItemExpense extends StatelessWidget {
       ),
       child: ListTile(
         onTap: callback,
-        title: Text(
-          item.title,
-          style: Theme.of(context)
-              .textTheme
-              .titleMedium,
-        ),
-        subtitle: Text(item.description),
-        trailing: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // GestureDetector(
-            //   onTap: (){},
-            //   child: Icon(Icons.edit),
-            // ),
-            Text("${Strings.r}${item.amount}", style: Theme.of(context).textTheme.titleMedium,), 
-            Text(Constants.formatDateTimeStr("${item.dateTime}")),
+            Text(
+              item.title,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium,
+            ),
+            Text("${Strings.r}${item.amount}", style: Theme.of(context).textTheme.titleMedium,)
           ],
         ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(item.description, maxLines: 2, overflow: TextOverflow.ellipsis,),
+            Align( 
+              alignment: Alignment.bottomRight,
+              child: Text(Constants.formatDateTimeStr("${item.dateTime}"), style: Theme.of(context).textTheme.labelSmall,)),
+          ],
+        ),
+        // trailing: ,
       ),
     );
   }

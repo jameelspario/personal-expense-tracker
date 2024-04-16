@@ -31,6 +31,11 @@ abstract class AppDatabase {
     db.delete(table());
   }
 
+  Future delete(id) async {
+    final db = await getDb();
+    await db.delete(table(), where: "id=?", whereArgs: [id]);
+  }
+
   Future insert(dynamic data) async {
     final db = await initializedDB();
     return await db.insert(table(), data.toMap(),
@@ -48,4 +53,10 @@ abstract class AppDatabase {
 
     return result;
   }
+
+   Future update(dynamic data) async {
+    final db = await initializedDB();
+    return await db.update(table(), data.toMap());
+  }
+
 }

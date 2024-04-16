@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal_expense_tracker/utils/extensions.dart';
 
 import '../../../utils/constants.dart';
+import '../../cubit/home/home_cubit.dart';
 import '../../widgets/custom_textbox.dart';
+import '../../widgets/dialogs.dart';
 
 class DetailExpense extends StatefulWidget {
   DetailExpense({this.item, this.callback, super.key});
@@ -18,6 +21,8 @@ class _DetailExpenseState extends State<DetailExpense> {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.watch<HomeCubit>();
+
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -33,13 +38,20 @@ class _DetailExpenseState extends State<DetailExpense> {
             ),
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Dialogs.confirmDialog(context,
+                  message: "Are you sure want to delete this record?",
+                  callback: () async {
+                    await bloc.deleteItem(widget.item);
+                    Navigator.pop(context);
+
+                  });
+            },
             child: const Padding(
               padding: EdgeInsets.all(8.0),
               child: Icon(Icons.delete_outline_rounded),
             ),
           ),
-          
         ],
       ),
       body: Padding(

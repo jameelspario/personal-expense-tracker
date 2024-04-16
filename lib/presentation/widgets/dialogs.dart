@@ -32,7 +32,39 @@ class Dialogs {
         });
   }
 
-  static Future addNewDialog(BuildContext context, {controllerTitle, controllerExpense, controllerDesription,  required VoidCallback callback}) async {
+  static Future confirmDialog(BuildContext context,
+      {String message = "", required VoidCallback callback}) async {
+    return showDialog(
+        context: context,
+        builder: (con) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            surfaceTintColor: Colors.white,
+            content: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                Text(message, textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleSmall,),
+                24.0.spaceY,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CustomButton(
+                        text: "Cancel", callback: () => Navigator.pop(context)),
+                    CustomButton(text: "Confirm", callback: callback),
+                  ],
+                )
+              ]),
+            ),
+          );
+        });
+  }
+
+  static Future addNewDialog(BuildContext context,
+      {controllerTitle,
+      controllerExpense,
+      controllerDesription,
+      required VoidCallback callback}) async {
     return showDialog(
         context: context,
         builder: (con) {

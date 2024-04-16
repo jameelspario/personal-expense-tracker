@@ -24,7 +24,6 @@ class HomePage extends StatelessWidget {
         create: (context) => HomeCubit(),
         child: BlocConsumer<HomeCubit, HomeState>(
           listener: (context, state) {
-            final bloc = context.watch<HomeCubit>();
             // TODO: implement listener
             if (state is HomeLoading) {
               Dialogs.loadingDialog(context);
@@ -36,12 +35,17 @@ class HomePage extends StatelessWidget {
               Dialogs.snackbar(context, state.message);
             }
             if (state is DetailExpenseState) {
+              final bloc = BlocProvider.of<HomeCubit>(context);
+
               Navigator.push(
                   context,
                   FadeRoute(
-                      page: DetailExpense(
-                    item: state.item,
-                    callback: () => bloc.editItem(state.item),
+                      page: BlocProvider.value(
+                    value: BlocProvider.of<HomeCubit>(context),
+                    child: DetailExpense(
+                      item: state.item,
+                      callback: () => bloc.editItem(state.item),
+                    ),
                   )));
             }
 
@@ -50,10 +54,10 @@ class HomePage extends StatelessWidget {
             // }
           },
           builder: (context, state) {
+            // print(state);
             if (state is AddExpenseState) {
-              // return AddExpense();
               return const AnimatedSwitcher(
-                duration: Duration(milliseconds: 250),
+                duration: Duration(milliseconds: 500),
                 child: AddExpense(),
               );
             }
@@ -68,6 +72,7 @@ class HomePage extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
@@ -80,19 +85,31 @@ class HomePage extends StatelessWidget {
                       24.0.spaceY,
                       const ItemSortCard(),
                       24.0.spaceY,
-                      Builder(builder: (_) {
-                        final bloc = BlocProvider.of<HomeCubit>(context);
-                        return ListView.separated(
-                          shrinkWrap: true,
-                          itemBuilder: (_, i) => ItemExpense(
-                            item: bloc.homeItems[i],
-                            callback: () =>
-                                bloc.gotoDetailExpense(bloc.homeItems[i]),
-                          ),
-                          separatorBuilder: (_, i) => Container(),
-                          itemCount: bloc.homeItems.length,
-                        );
-                      })
+                      Expanded(
+                        child: Builder(builder: (_) {
+                          final bloc = BlocProvider.of<HomeCubit>(context);
+                          return bloc.homeItems.isEmpty
+                              ? Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.6,
+                                  child: Center(
+                                      child: Text(Strings.mesg1,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge)),
+                                )
+                              : ListView.separated(
+                                  // shrinkWrap: true,
+                                  itemBuilder: (_, i) => ItemExpense(
+                                    item: bloc.homeItems[i],
+                                    callback: () => bloc
+                                        .gotoDetailExpense(bloc.homeItems[i]),
+                                  ),
+                                  separatorBuilder: (_, i) => Container(),
+                                  itemCount: bloc.homeItems.length,
+                                );
+                        }),
+                      )
                     ]),
               ),
               floatingActionButton: FloatingActionButton.small(
